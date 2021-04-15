@@ -41,6 +41,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jasig.portal</groupId>
+            <artifactId>uPortal-soffit-renderer</artifactId>
+            <version>5.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  address: localhost
+  servlet:
+    context-path: /mediacentre
+  error:
+    whitelabel.enabled: true
+    include-binding-errors: always
+    include-exception: true
+    include-message: always
+    include-stacktrace: always
+
+logging:
+  level:
+    web: DEBUG
+    fr: DEBUG
+
+soffit:
+  jwt.signatureKey: "signatureKey"
