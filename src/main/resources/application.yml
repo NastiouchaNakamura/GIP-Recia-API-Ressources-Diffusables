@@ -15,5 +15,6 @@ logging:
     web: DEBUG
     fr: DEBUG
 
-soffit:
-  jwt.signatureKey: "signatureKey"
+spring:
+  config:
+    import: classpath:private.yml

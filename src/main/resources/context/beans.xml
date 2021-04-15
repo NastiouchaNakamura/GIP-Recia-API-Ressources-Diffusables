@@ -12,5 +12,5 @@
     <context:annotation-config/>
 
     <!-- MediacentreService -->
-    <bean id="mediacentreService" class="fr.anael.apimediacentre.service.MediacentreServiceStatique"/>
+    <bean id="mediacentreService" class="fr.anael.apimediacentre.service.MediacentreServiceHttpGet"/>
 </beans>
