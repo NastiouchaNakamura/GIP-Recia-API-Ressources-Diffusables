@@ -117,7 +117,6 @@ public class MediacentreServiceHttpGet implements MediacentreService {
         log.info("Mediacentre file download: Starting download procedure");
         log.debug("Mediacentre file download: URL is {}", this.ressourcesDiffusablesUri);
 
-        /*
         try {
             URL website = new URL(this.ressourcesDiffusablesUri);
 
@@ -127,11 +126,8 @@ public class MediacentreServiceHttpGet implements MediacentreService {
 
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-         */
-
             this.ressourcesDiffusablesFile = new File("src/main/resources/downloads/mediacentre.json");
             this.dateTelechargement = LocalDateTime.now();
-        /*
         } catch (MalformedURLException malformedURLException) {
             log.error("Mediacentre file download: malformed URL exception");
             malformedURLException.printStackTrace();
@@ -139,7 +135,6 @@ public class MediacentreServiceHttpGet implements MediacentreService {
             log.error("Mediacentre file download: IO exception");
             ioException.printStackTrace();
         }
-         */
 
         // Suppression de l'historique.
         this.historiqueRequetes.clear();
