@@ -1,6 +1,7 @@
 package fr.anael.apimediacentre.service;
 
 import fr.anael.apimediacentre.model.RessourceDiffusable;
+import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,10 +10,47 @@ import java.util.List;
 
 public class MediacentreServiceStatique implements MediacentreService {
     // Attributs
-    private final List<RessourceDiffusable> ressourcesDiffusables = new ArrayList<>();
+    private final List<RessourceDiffusable> ressourcesDiffusablesComplet = new ArrayList<>();
 
-    // Constructeurs
-    public MediacentreServiceStatique() {
+    // Getteurs
+    @Override
+    public int getNombreDePages(int elementsParPage, RessourceDiffusableFilter filter) {
+        if (this.ressourcesDiffusablesComplet.isEmpty()) {
+            this.initialize();
+        }
+
+        if (filter.isEmpty()) {
+            return (int) Math.ceil(this.ressourcesDiffusablesComplet.size() / (double) elementsParPage);
+        } else {
+            List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
+            for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
+                if (filter.filter(ressourceDiffusable)) {
+                    ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
+                }
+            }
+
+            return (int) Math.ceil(ressourcesDiffusablesFiltrees.size() / (double) elementsParPage);
+        }
+    }
+
+    @Override
+    public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage, RessourceDiffusableFilter filter) {
+        if (this.ressourcesDiffusablesComplet.isEmpty()) {
+            this.initialize();
+        }
+
+        List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
+        for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
+            if (filter.filter(ressourceDiffusable)) {
+                ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
+            }
+        }
+
+        return ressourcesDiffusablesFiltrees;
+    }
+
+    // Méthodes
+    private void initialize() {
         this.ajouterRessource(
                 new RessourceDiffusable(
                         "ark/86527/049777635741477512036823067623231707978",
@@ -41,23 +79,7 @@ public class MediacentreServiceStatique implements MediacentreService {
         }
     }
 
-    // Getteurs
-    @Override
-    public int getNombreDePages(int elementsParPage) {
-        return (int) Math.ceil(this.ressourcesDiffusables.size() / (double) elementsParPage);
-    }
-
-    @Override
-    public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage) {
-        List<RessourceDiffusable> ressourcesDiffusables = new ArrayList<>();
-        for (int i = page * elementsParPage; i < Math.min((page + 1) * elementsParPage, this.ressourcesDiffusables.size()); i++) {
-            ressourcesDiffusables.add(this.ressourcesDiffusables.get(i));
-        }
-        return ressourcesDiffusables;
-    }
-
-    // Méthodes
     private void ajouterRessource(RessourceDiffusable ressourceDiffusable) {
-        this.ressourcesDiffusables.add(ressourceDiffusable);
+        this.ressourcesDiffusablesComplet.add(ressourceDiffusable);
     }
 }

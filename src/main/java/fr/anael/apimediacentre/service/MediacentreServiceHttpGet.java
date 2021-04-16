@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
+import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -16,9 +17,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
@@ -28,7 +27,7 @@ public class MediacentreServiceHttpGet implements MediacentreService {
     @Value("${mediacentre.ressources-diffusables-uri:}")
     private String ressourcesDiffusablesUri;
 
-    private final List<RessourceDiffusable> ressourcesDiffusables = new ArrayList<>();
+    private final List<RessourceDiffusable> ressourcesDiffusablesComplet = new ArrayList<>();
 
     private File ressourcesDiffusablesFile = null;
 
@@ -38,29 +37,72 @@ public class MediacentreServiceHttpGet implements MediacentreService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final LinkedHashMap<RessourceDiffusableFilter, List<RessourceDiffusable>> historiqueRequetes = new LinkedHashMap<>() {
+        @Override
+        protected boolean removeEldestEntry(final Map.Entry eldest) {
+            return size() > 10;
+        }
+    };
+
     // Getteurs
     @Override
-    public int getNombreDePages(int elementsParPage) {
+    public int getNombreDePages(int elementsParPage, RessourceDiffusableFilter filter) {
         this.verifValidite();
 
-        return (int) Math.ceil(this.ressourcesDiffusables.size() / (double) elementsParPage);
+        if (filter.isEmpty()) {
+            return (int) Math.ceil(this.ressourcesDiffusablesComplet.size() / (double) elementsParPage);
+        } else {
+            List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.historiqueRequetes.get(filter);
+            if (ressourcesDiffusablesHistorisees != null) {
+                return (int) Math.ceil(ressourcesDiffusablesHistorisees.size() / (double) elementsParPage);
+            } else {
+                List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
+                for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
+                    if (filter.filter(ressourceDiffusable)) {
+                        ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
+                    }
+                }
+                this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
+                return (int) Math.ceil(ressourcesDiffusablesFiltrees.size() / (double) elementsParPage);
+            }
+        }
     }
 
     @Override
-    public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage) {
+    public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage, RessourceDiffusableFilter filter) {
+        // On vérifie que les données sont toujours valides.
         this.verifValidite();
 
-        List<RessourceDiffusable> ressourcesDiffusables = new ArrayList<>();
-        for (int i = page * elementsParPage; i < Math.min((page + 1) * elementsParPage, this.ressourcesDiffusables.size()); i++) {
-            ressourcesDiffusables.add(this.ressourcesDiffusables.get(i));
+        if (filter.isEmpty()) {
+            return this.genererPage(this.ressourcesDiffusablesComplet, page, elementsParPage);
+        } else {
+            List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.historiqueRequetes.get(filter);
+            if (ressourcesDiffusablesHistorisees != null) {
+                return this.genererPage(ressourcesDiffusablesHistorisees, page, elementsParPage);
+            } else {
+                List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
+                for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
+                    if (filter.filter(ressourceDiffusable)) {
+                        ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
+                    }
+                }
+                this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
+                return this.genererPage(ressourcesDiffusablesFiltrees, page, elementsParPage);
+            }
         }
-
-        return ressourcesDiffusables;
     }
 
     // Méthodes
+    private List<RessourceDiffusable> genererPage(List<RessourceDiffusable> ressourcesDiffusablesTotal, int page, int elementsParPage) {
+        List<RessourceDiffusable> ressourcesDiffusables = new ArrayList<>();
+        for (int i = page * elementsParPage; i < Math.min((page + 1) * elementsParPage, ressourcesDiffusablesTotal.size()); i++) {
+            ressourcesDiffusables.add(ressourcesDiffusablesTotal.get(i));
+        }
+        return ressourcesDiffusables;
+    }
+
     private void ajouterRessource(RessourceDiffusable ressourceDiffusable) {
-        this.ressourcesDiffusables.add(ressourceDiffusable);
+        this.ressourcesDiffusablesComplet.add(ressourceDiffusable);
     }
 
     private void verifValidite() {
@@ -71,9 +113,11 @@ public class MediacentreServiceHttpGet implements MediacentreService {
     }
 
     private void telechargerFichier() {
+        // Début de téléchargement.
         log.info("Mediacentre file download: Starting download procedure");
         log.debug("Mediacentre file download: URL is {}", this.ressourcesDiffusablesUri);
 
+        /*
         try {
             URL website = new URL(this.ressourcesDiffusablesUri);
 
@@ -83,9 +127,11 @@ public class MediacentreServiceHttpGet implements MediacentreService {
 
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
+         */
+
             this.ressourcesDiffusablesFile = new File("src/main/resources/downloads/mediacentre.json");
             this.dateTelechargement = LocalDateTime.now();
-
+        /*
         } catch (MalformedURLException malformedURLException) {
             log.error("Mediacentre file download: malformed URL exception");
             malformedURLException.printStackTrace();
@@ -93,7 +139,12 @@ public class MediacentreServiceHttpGet implements MediacentreService {
             log.error("Mediacentre file download: IO exception");
             ioException.printStackTrace();
         }
+         */
 
+        // Suppression de l'historique.
+        this.historiqueRequetes.clear();
+
+        // Fin de téléchargement
         log.info("Mediacentre file download: Mediacentre file successfully downloaded!");
     }
 
@@ -151,11 +202,17 @@ public class MediacentreServiceHttpGet implements MediacentreService {
                 );
             }
         } catch (JsonProcessingException e) {
+            log.error("Reading of Mediacentre file: JSON processing exception");
             e.printStackTrace();
         } catch (IOException ioException) {
+            log.error("Reading of Mediacentre file: IO exception");
             ioException.printStackTrace();
         }
 
+        // Suppression de l'historique.
+        this.historiqueRequetes.clear();
+
+        // Fin de lecture.
         log.debug("Reading of Mediacentre file: Mediacentre file successfully read!");
     }
 }

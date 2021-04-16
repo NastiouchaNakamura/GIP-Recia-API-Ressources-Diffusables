@@ -34,7 +34,6 @@ public class RessourceDiffusable {
     }
 
     // Getteurs
-    @JsonIgnore
     public String getIdRessource() {
         return this.idRessource;
     }
