@@ -1,0 +1,38 @@
+<head>
+    <meta charset="utf-8">
+    <script src="js/dist/vue.js"></script>
+</head>
+
+<body>
+<div id="ressourcesDiffusables">
+    <div v-if="erreur">
+        {{ erreur }}
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Ressource
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="ressource in ressources">
+            <td>
+                {{ ressource.idRessource }}
+            </td>
+            <td>
+                {{ ressource.nomRessource }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="js/vueFrontEnd.js"></script>
+</body>
+
+
