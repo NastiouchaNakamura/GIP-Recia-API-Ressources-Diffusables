@@ -26,11 +26,11 @@ public class RessourceDiffusableFilter {
             Boolean affichable,
             Boolean diffusable
     ) {
-        this.idRessource = idRessource.toLowerCase(Locale.ROOT);
-        this.nomRessource = nomRessource.toLowerCase(Locale.ROOT);
-        this.idEditeur = idEditeur.toLowerCase(Locale.ROOT);
-        this.distributeurCom = distributeurCom.toLowerCase(Locale.ROOT);
-        this.distributeurTech = distributeurTech.toLowerCase(Locale.ROOT);
+        this.idRessource = idRessource == null ? null : idRessource.toLowerCase(Locale.ROOT);
+        this.nomRessource = nomRessource == null ? null : nomRessource.toLowerCase(Locale.ROOT);
+        this.idEditeur = idEditeur == null ? null : idEditeur.toLowerCase(Locale.ROOT);
+        this.distributeurCom = distributeurCom == null ? null : distributeurCom.toLowerCase(Locale.ROOT);
+        this.distributeurTech = distributeurTech == null ? null : distributeurTech.toLowerCase(Locale.ROOT);
         this.affichable = affichable;
         this.diffusable = diffusable;
     }
