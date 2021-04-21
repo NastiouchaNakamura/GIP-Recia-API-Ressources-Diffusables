@@ -2,6 +2,7 @@ package fr.anael.apimediacentre.model;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.Normalizer;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -25,11 +26,11 @@ public class RessourceDiffusableFilter {
             Boolean affichable,
             Boolean diffusable
     ) {
-        this.idRessource = idRessource;
-        this.nomRessource = nomRessource;
-        this.idEditeur = idEditeur;
-        this.distributeurCom = distributeurCom;
-        this.distributeurTech = distributeurTech;
+        this.idRessource = idRessource.toLowerCase(Locale.ROOT);
+        this.nomRessource = nomRessource.toLowerCase(Locale.ROOT);
+        this.idEditeur = idEditeur.toLowerCase(Locale.ROOT);
+        this.distributeurCom = distributeurCom.toLowerCase(Locale.ROOT);
+        this.distributeurTech = distributeurTech.toLowerCase(Locale.ROOT);
         this.affichable = affichable;
         this.diffusable = diffusable;
     }
@@ -77,27 +78,29 @@ public class RessourceDiffusableFilter {
         return Objects.hash(idRessource, nomRessource, idEditeur, distributeurCom, distributeurTech, affichable, diffusable);
     }
 
-    private boolean containsLowerCase(String s1, String s2) {
-        return s1.toLowerCase(Locale.ROOT).contains(s2.toLowerCase(Locale.ROOT));
+    private static String unaccent(String string) {
+        return Normalizer
+                .normalize(string, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
     }
 
     public boolean filter(RessourceDiffusable rd) {
-        if (this.idRessource != null && !this.containsLowerCase(rd.getIdRessource(), this.idRessource)) {
+        if (this.idRessource != null && !unaccent(rd.getIdRessource()).toLowerCase(Locale.ROOT).contains(this.idRessource)) {
             return false;
         }
 
-        if (this.nomRessource != null && !this.containsLowerCase(rd.getNomRessource(), this.nomRessource)) {
+        if (this.nomRessource != null && !unaccent(rd.getNomRessource()).toLowerCase(Locale.ROOT).contains(this.nomRessource)) {
             return false;
         }
 
-        if (this.idEditeur != null && !this.containsLowerCase(rd.getIdEditeur(), this.idEditeur)) {
+        if (this.idEditeur != null && !unaccent(rd.getIdEditeur()).toLowerCase(Locale.ROOT).contains(this.idEditeur)) {
             return false;
         }
 
         if (this.distributeurCom != null) {
             boolean valide = false;
             for (String distributeurCom : rd.getDistributeursCom()) {
-                if (this.containsLowerCase(distributeurCom, this.distributeurCom)) {
+                if (unaccent(distributeurCom).toLowerCase(Locale.ROOT).contains(this.distributeurCom)) {
                     valide = true;
                     break;
                 }
@@ -107,7 +110,7 @@ public class RessourceDiffusableFilter {
             }
         }
 
-        if (this.distributeurTech != null && !this.containsLowerCase(rd.getDistributeurTech(), this.distributeurTech)) {
+        if (this.distributeurTech != null && !unaccent(rd.getDistributeurTech()).toLowerCase(Locale.ROOT).contains(this.distributeurTech)) {
             return false;
         }
 
