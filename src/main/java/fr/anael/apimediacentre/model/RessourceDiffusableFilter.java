@@ -2,6 +2,7 @@ package fr.anael.apimediacentre.model;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class RessourceDiffusableFilter {
@@ -76,14 +77,49 @@ public class RessourceDiffusableFilter {
         return Objects.hash(idRessource, nomRessource, idEditeur, distributeurCom, distributeurTech, affichable, diffusable);
     }
 
-    public boolean filter(RessourceDiffusable ressourceDiffusable) {
-        return (this.idRessource == null || ressourceDiffusable.getIdRessource().contains(this.idRessource)) &&
-                (this.nomRessource == null || ressourceDiffusable.getNomRessource().contains(this.nomRessource)) &&
-                (this.idEditeur == null || ressourceDiffusable.getIdEditeur().contains(this.idEditeur)) &&
-                (this.distributeurCom == null || ressourceDiffusable.getDistributeursCom().contains(this.distributeurCom)) && // TODO: Ici on check la chaîne entière il faudrait check une partie uniquement comme pour les autres.
-                (this.distributeurTech == null || ressourceDiffusable.getDistributeurTech().contains(this.distributeurTech)) &&
-                (this.affichable == null || this.affichable == ressourceDiffusable.isAffichable()) &&
-                (this.diffusable == null || this.diffusable == ressourceDiffusable.isDiffusable());
+    private boolean containsLowerCase(String s1, String s2) {
+        return s1.toLowerCase(Locale.ROOT).contains(s2.toLowerCase(Locale.ROOT));
+    }
+
+    public boolean filter(RessourceDiffusable rd) {
+        if (this.idRessource != null && !this.containsLowerCase(rd.getIdRessource(), this.idRessource)) {
+            return false;
+        }
+
+        if (this.nomRessource != null && !this.containsLowerCase(rd.getNomRessource(), this.nomRessource)) {
+            return false;
+        }
+
+        if (this.idEditeur != null && !this.containsLowerCase(rd.getIdEditeur(), this.idEditeur)) {
+            return false;
+        }
+
+        if (this.distributeurCom != null) {
+            boolean valide = false;
+            for (String distributeurCom : rd.getDistributeursCom()) {
+                if (this.containsLowerCase(distributeurCom, this.distributeurCom)) {
+                    valide = true;
+                    break;
+                }
+            }
+            if (!valide) {
+                return false;
+            }
+        }
+
+        if (this.distributeurTech != null && !this.containsLowerCase(rd.getDistributeurTech(), this.distributeurTech)) {
+            return false;
+        }
+
+        if (this.affichable != null && this.affichable != rd.isAffichable()) {
+            return false;
+        }
+
+        if (this.diffusable != null && this.diffusable != rd.isDiffusable()) {
+            return false;
+        }
+
+        return true;
     }
 
     public boolean isEmpty() {
