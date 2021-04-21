@@ -74,10 +74,12 @@ public class MediacentreServiceHttpGet implements MediacentreService {
         this.verifValidite();
 
         if (filter.isEmpty()) {
+            log.debug("Ressources diffusables request: No filter; no need to check history");
             return this.genererPage(this.ressourcesDiffusablesComplet, page, elementsParPage);
         } else {
             List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.historiqueRequetes.get(filter);
             if (ressourcesDiffusablesHistorisees != null) {
+                log.debug("Ressources diffusables request: Getting request result from history");
                 return this.genererPage(ressourcesDiffusablesHistorisees, page, elementsParPage);
             } else {
                 List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
@@ -86,6 +88,7 @@ public class MediacentreServiceHttpGet implements MediacentreService {
                         ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
                     }
                 }
+                log.debug("Ressources diffusables request: Putting request result in history");
                 this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
                 return this.genererPage(ressourcesDiffusablesFiltrees, page, elementsParPage);
             }
