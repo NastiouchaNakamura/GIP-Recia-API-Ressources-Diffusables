@@ -77,11 +77,11 @@ public class RessourceDiffusableFilter {
     }
 
     public boolean filter(RessourceDiffusable ressourceDiffusable) {
-        return (this.idRessource == null || this.idRessource.equals(ressourceDiffusable.getIdRessource())) &&
-                (this.nomRessource == null || this.nomRessource.equals(ressourceDiffusable.getNomRessource())) &&
-                (this.idEditeur == null || this.idEditeur.equals(ressourceDiffusable.getIdEditeur())) &&
-                (this.distributeurCom == null || ressourceDiffusable.getDistributeursCom().contains(this.distributeurCom)) &&
-                (this.distributeurTech == null || this.distributeurTech.equals(ressourceDiffusable.getDistributeurTech())) &&
+        return (this.idRessource == null || ressourceDiffusable.getIdRessource().contains(this.idRessource)) &&
+                (this.nomRessource == null || ressourceDiffusable.getNomRessource().contains(this.nomRessource)) &&
+                (this.idEditeur == null || ressourceDiffusable.getIdEditeur().contains(this.idEditeur)) &&
+                (this.distributeurCom == null || ressourceDiffusable.getDistributeursCom().contains(this.distributeurCom)) && // TODO: Ici on check la chaîne entière il faudrait check une partie uniquement comme pour les autres.
+                (this.distributeurTech == null || ressourceDiffusable.getDistributeurTech().contains(this.distributeurTech)) &&
                 (this.affichable == null || this.affichable == ressourceDiffusable.isAffichable()) &&
                 (this.diffusable == null || this.diffusable == ressourceDiffusable.isDiffusable());
     }
