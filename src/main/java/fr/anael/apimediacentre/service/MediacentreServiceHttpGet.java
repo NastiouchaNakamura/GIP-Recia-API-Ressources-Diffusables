@@ -88,8 +88,9 @@ public class MediacentreServiceHttpGet implements MediacentreService {
                         ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
                     }
                 }
-                log.debug("Ressources diffusables request: Putting request result in history");
+                log.debug("Ressources diffusables request: Putting request result in history; new size of history will be " + Math.min(this.historiqueRequetes.size() + 1, 6));
                 this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
+
                 return this.genererPage(ressourcesDiffusablesFiltrees, page, elementsParPage);
             }
         }
