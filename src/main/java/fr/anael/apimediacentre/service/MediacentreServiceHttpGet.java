@@ -48,41 +48,33 @@ public class MediacentreServiceHttpGet implements MediacentreService {
 
     // Getteurs
     @Override
-    public int getNombreDePages(int elementsParPage, RessourceDiffusableFilter filter) {
-        this.verifValidite();
+    public int getSize(RessourceDiffusableFilter filter) {
+        return this.rechercher(filter).size();
+    }
 
-        if (filter.isEmpty()) {
-            return (int) Math.ceil(this.ressourcesDiffusablesComplet.size() / (double) elementsParPage);
-        } else {
-            List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.historiqueRequetes.get(filter);
-            if (ressourcesDiffusablesHistorisees != null) {
-                return (int) Math.ceil(ressourcesDiffusablesHistorisees.size() / (double) elementsParPage);
-            } else {
-                List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
-                for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
-                    if (filter.filter(ressourceDiffusable)) {
-                        ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
-                    }
-                }
-                this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
-                return (int) Math.ceil(ressourcesDiffusablesFiltrees.size() / (double) elementsParPage);
-            }
-        }
+    @Override
+    public int getPageCount(int elementsParPage, RessourceDiffusableFilter filter) {
+        return (int) Math.ceil(this.rechercher(filter).size() / (double) elementsParPage);
     }
 
     @Override
     public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage, RessourceDiffusableFilter filter) {
+        return this.genererPage(this.rechercher(filter), page, elementsParPage);
+    }
+
+    // Méthodes
+    private List<RessourceDiffusable> rechercher(RessourceDiffusableFilter filter) {
         // On vérifie que les données sont toujours valides.
         this.verifValidite();
 
-        if (filter.isEmpty()) {
+        if (filter.isEmpty()) { // Soit le filtre est vide...
             log.debug("Ressources diffusables request: No filter; no need to check history");
-            return this.genererPage(this.ressourcesDiffusablesComplet, page, elementsParPage);
-        } else {
+            return this.ressourcesDiffusablesComplet;
+        } else { // Soit il faut faire un filtrage. Il est peut-être historisé.
             List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.historiqueRequetes.get(filter);
             if (ressourcesDiffusablesHistorisees != null) {
                 log.debug("Ressources diffusables request: Getting request result from history");
-                return this.genererPage(ressourcesDiffusablesHistorisees, page, elementsParPage);
+                return ressourcesDiffusablesHistorisees;
             } else {
                 List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
                 for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
@@ -92,13 +84,11 @@ public class MediacentreServiceHttpGet implements MediacentreService {
                 }
                 log.debug("Ressources diffusables request: Putting request result in history; new size of history will be " + Math.min(this.historiqueRequetes.size() + 1, 6));
                 this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
-
-                return this.genererPage(ressourcesDiffusablesFiltrees, page, elementsParPage);
+                return ressourcesDiffusablesFiltrees;
             }
         }
     }
 
-    // Méthodes
     private List<RessourceDiffusable> genererPage(List<RessourceDiffusable> ressourcesDiffusablesTotal, int page, int elementsParPage) {
         List<RessourceDiffusable> ressourcesDiffusables = new ArrayList<>();
         for (int i = page * elementsParPage; i < Math.min((page + 1) * elementsParPage, ressourcesDiffusablesTotal.size()); i++) {

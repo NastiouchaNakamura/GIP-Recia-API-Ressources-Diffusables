@@ -7,7 +7,9 @@ import java.util.Collection;
 
 public interface MediacentreService {
     // Getteurs
-    int getNombreDePages(int elementsParPage, RessourceDiffusableFilter filter);
+    int getSize(RessourceDiffusableFilter filter);
+
+    int getPageCount(int elementsParPage, RessourceDiffusableFilter filter);
 
     Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage, RessourceDiffusableFilter filter);
 }

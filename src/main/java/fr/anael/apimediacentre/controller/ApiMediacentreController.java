@@ -68,7 +68,7 @@ public class ApiMediacentreController {
             HttpServletResponse response
     ) {
         log.debug("Nombre pages ressources diffusables request.");
-        return this.mediacentreService.getNombreDePages(
+        return this.mediacentreService.getPageCount(
                 elementsParPage,
                 new RessourceDiffusableFilter(
                         idRessource,

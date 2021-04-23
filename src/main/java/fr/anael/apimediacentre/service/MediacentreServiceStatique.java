@@ -15,7 +15,12 @@ public class MediacentreServiceStatique implements MediacentreService {
 
     // Getteurs
     @Override
-    public int getNombreDePages(int elementsParPage, RessourceDiffusableFilter filter) {
+    public int getSize(RessourceDiffusableFilter filter) {
+        return this.ressourcesDiffusablesComplet.size();
+    }
+
+    @Override
+    public int getPageCount(int elementsParPage, RessourceDiffusableFilter filter) {
         if (this.ressourcesDiffusablesComplet.isEmpty()) {
             this.initialize();
         }
