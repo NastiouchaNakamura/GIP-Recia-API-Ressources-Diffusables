@@ -54,7 +54,7 @@ public class ApiMediacentreController {
         );
     }
 
-    @GetMapping(value = "/ressources-diffusables/pages")
+    @GetMapping(value = "/ressources-diffusables/page-count")
     public int pageCount(
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
@@ -82,7 +82,7 @@ public class ApiMediacentreController {
         );
     }
 
-    @GetMapping(value = "/ressources-diffusables/pages")
+    @GetMapping(value = "/ressources-diffusables/size")
     public int size(
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
