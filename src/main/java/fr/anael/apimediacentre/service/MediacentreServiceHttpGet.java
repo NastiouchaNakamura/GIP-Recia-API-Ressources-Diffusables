@@ -240,6 +240,7 @@ public class MediacentreServiceHttpGet implements MediacentreService {
                 // Exemple :
                 //     editeur: {"130006042_0000000106379136", "");
                 //     distributeurTech: {"130006042_0000000106379136", "Agrosup Dijon"}
+                // Il y a ce genre d'ambiguïté dans le fichier téléchargé.
                 this.ajouterRessource(
                         new RessourceDiffusable(
                                 new AttributRessource(
