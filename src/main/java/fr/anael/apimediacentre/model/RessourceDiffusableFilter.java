@@ -1,7 +1,5 @@
 package fr.anael.apimediacentre.model;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.text.Normalizer;
 import java.util.Locale;
 import java.util.Objects;
@@ -85,22 +83,22 @@ public class RessourceDiffusableFilter {
     }
 
     public boolean filter(RessourceDiffusable rd) {
-        if (this.idRessource != null && !unaccent(rd.getIdRessource()).toLowerCase(Locale.ROOT).contains(this.idRessource)) {
+        if (this.idRessource != null && !unaccent(rd.getRessource().getId()).toLowerCase(Locale.ROOT).contains(this.idRessource)) {
             return false;
         }
 
-        if (this.nomRessource != null && !unaccent(rd.getNomRessource()).toLowerCase(Locale.ROOT).contains(this.nomRessource)) {
+        if (this.nomRessource != null && !unaccent(rd.getRessource().getNom()).toLowerCase(Locale.ROOT).contains(this.nomRessource)) {
             return false;
         }
 
-        if (this.idEditeur != null && !unaccent(rd.getIdEditeur()).toLowerCase(Locale.ROOT).contains(this.idEditeur)) {
+        if (this.idEditeur != null && !unaccent(rd.getEditeur().getId()).toLowerCase(Locale.ROOT).contains(this.idEditeur)) {
             return false;
         }
 
         if (this.distributeurCom != null) {
             boolean valide = false;
-            for (String distributeurCom : rd.getDistributeursCom()) {
-                if (unaccent(distributeurCom).toLowerCase(Locale.ROOT).contains(this.distributeurCom)) {
+            for (AttributRessource distributeurCom : rd.getDistributeursCom()) {
+                if (unaccent(distributeurCom.getId()).toLowerCase(Locale.ROOT).contains(this.distributeurCom)) {
                     valide = true;
                     break;
                 }
@@ -110,7 +108,7 @@ public class RessourceDiffusableFilter {
             }
         }
 
-        if (this.distributeurTech != null && !unaccent(rd.getDistributeurTech()).toLowerCase(Locale.ROOT).contains(this.distributeurTech)) {
+        if (this.distributeurTech != null && !unaccent(rd.getDistributeurTech().getId()).toLowerCase(Locale.ROOT).contains(this.distributeurTech)) {
             return false;
         }
 

@@ -3,30 +3,28 @@ package fr.anael.apimediacentre.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class RessourceDiffusable {
     // Attributs
-    private final String idRessource;
-    private final String nomRessource;
-    private final String idEditeur;
-    private final Collection<String> distributeursCom;
-    private final String distributeurTech;
+    private final AttributRessource ressource;
+    private final AttributRessource editeur;
+    private final Collection<AttributRessource> distributeursCom;
+    private final AttributRessource distributeurTech;
     private final boolean affichable;
     private final boolean diffusable;
 
     // Constructeurs
     public RessourceDiffusable(
-            String idRessource,
-            String nomRessource,
-            String idEditeur,
-            Collection<String> distributeursCom,
-            String distributeurTech,
+            AttributRessource ressource,
+            AttributRessource editeur,
+            Collection<AttributRessource> distributeursCom,
+            AttributRessource distributeurTech,
             boolean affichable,
             boolean diffusable
     ) {
-        this.idRessource = idRessource;
-        this.nomRessource = nomRessource;
-        this.idEditeur = idEditeur;
+        this.ressource = ressource;
+        this.editeur = editeur;
         this.distributeursCom = distributeursCom;
         this.distributeurTech = distributeurTech;
         this.affichable = affichable;
@@ -34,23 +32,19 @@ public class RessourceDiffusable {
     }
 
     // Getteurs
-    public String getIdRessource() {
-        return this.idRessource;
+    public AttributRessource getRessource() {
+        return this.ressource;
     }
 
-    public String getNomRessource() {
-        return this.nomRessource;
+    public AttributRessource getEditeur() {
+        return this.editeur;
     }
 
-    public String getIdEditeur() {
-        return this.idEditeur;
-    }
-
-    public Collection<String> getDistributeursCom() {
+    public Collection<AttributRessource> getDistributeursCom() {
         return this.distributeursCom;
     }
 
-    public String getDistributeurTech() {
+    public AttributRessource getDistributeurTech() {
         return this.distributeurTech;
     }
 
@@ -60,5 +54,19 @@ public class RessourceDiffusable {
 
     public boolean isDiffusable() {
         return this.diffusable;
+    }
+
+    // Méthodes
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RessourceDiffusable that = (RessourceDiffusable) o;
+        return affichable == that.affichable && diffusable == that.diffusable && ressource.equals(that.ressource) && editeur.equals(that.editeur) && distributeursCom.equals(that.distributeursCom) && distributeurTech.equals(that.distributeurTech);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ressource, editeur, distributeursCom, distributeurTech, affichable, diffusable);
     }
 }

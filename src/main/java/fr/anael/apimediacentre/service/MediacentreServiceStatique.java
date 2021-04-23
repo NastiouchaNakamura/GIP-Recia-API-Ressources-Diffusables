@@ -1,5 +1,6 @@
 package fr.anael.apimediacentre.service;
 
+import fr.anael.apimediacentre.model.AttributRessource;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
 
@@ -53,11 +54,24 @@ public class MediacentreServiceStatique implements MediacentreService {
     private void initialize() {
         this.ajouterRessource(
                 new RessourceDiffusable(
-                        "ark/86527/049777635741477512036823067623231707978",
-                        "Outils et langages numériques - Première Spécialité - Voie Technologique - STD2A (Tactileo Maskott)",
-                        "479875718_0000000000000000",
-                        Arrays.asList("479875718_0000000000000000"),
-                        "479875718_0000000000000000",
+                        new AttributRessource(
+                                "ark/86527/049777635741477512036823067623231707978",
+                                "Outils et langages numériques - Première Spécialité - Voie Technologique - STD2A (Tactileo Maskott)"
+                        ),
+                        new AttributRessource(
+                                "479875718_0000000000000000",
+                                ""
+                        ),
+                        Arrays.asList(
+                                new AttributRessource(
+                                        "479875718_0000000000000000",
+                                        ""
+                                )
+                        ),
+                        new AttributRessource(
+                                "479875718_0000000000000000",
+                                ""
+                        ),
                         true,
                         true
 
@@ -67,13 +81,31 @@ public class MediacentreServiceStatique implements MediacentreService {
         for (int i = 0; i < 100; i++) {
             this.ajouterRessource(
                     new RessourceDiffusable(
-                            "idRessource." + i,
-                            "nomRessource." + i,
-                            "idEditeur." + i,
-                            Arrays.asList("distributeurCom." + i + ".1", "distributeurCom." + i + ".2"),
-                            "distributeurTech." + i,
+                            new AttributRessource(
+                                    "idRessource." + i,
+                                    "nomRessource." + i
+                            ),
+                            new AttributRessource(
+                                    "idEditeur." + i,
+                                    ""
+                            ),
+                            Arrays.asList(
+                                    new AttributRessource(
+                                            "distributeurCom." + i + ".1",
+                                            ""
+                                    ),
+                                    new AttributRessource(
+                                            "distributeurCom." + i + ".2",
+                                            ""
+                                    )
+                            ),
+                            new AttributRessource(
+                                    "distributeurTech." + i,
+                                    ""
+                            ),
                             true,
                             true
+
                     )
             );
         }
