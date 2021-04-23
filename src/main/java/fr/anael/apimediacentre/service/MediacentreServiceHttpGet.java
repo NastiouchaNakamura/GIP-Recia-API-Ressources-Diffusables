@@ -200,7 +200,7 @@ public class MediacentreServiceHttpGet implements MediacentreService {
                 String idEditeur = ressourceDiffusableJson.get("idEditeur").asText();
                 JsonNode nomEditeurJson = ressourceDiffusableJson.get("nomEditeur");
                 if (nomEditeurJson != null) {
-                    attributsPseudoCache.put(idRessource, nomEditeurJson.asText());
+                    attributsPseudoCache.put(idEditeur, nomEditeurJson.asText());
                 }
 
                 // Récupération du node JSON des distributeurs com.
