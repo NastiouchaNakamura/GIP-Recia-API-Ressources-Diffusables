@@ -58,8 +58,8 @@ public class MediacentreServiceHttpGet implements MediacentreService {
     }
 
     @Override
-    public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int elementsParPage, RessourceDiffusableFilter filter) {
-        return this.genererPage(this.rechercher(filter), page, elementsParPage);
+    public Collection<RessourceDiffusable> getRessourcesDiffusables(int page, int ressourcesPerPage, RessourceDiffusableFilter filter) {
+        return this.genererPage(this.rechercher(filter), page, ressourcesPerPage);
     }
 
     // Méthodes

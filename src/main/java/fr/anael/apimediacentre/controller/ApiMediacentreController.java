@@ -23,47 +23,54 @@ public class ApiMediacentreController {
     @GetMapping(value = "/ressources-diffusables")
     public Collection<RessourceDiffusable> ressourcesDiffusables(
             @RequestParam(value = "page") final int page,
+            @RequestParam(value = "operator", required = false) final String operator,
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
             @RequestParam(value = "idEditeur", required = false) final String idEditeur,
+            @RequestParam(value = "nomEditeur", required = false)  final String nomEditeur,
             @RequestParam(value = "distributeurCom", required = false) final String distributeurCom,
+            @RequestParam(value = "nomDistributeurCom", required = false)  final String nomDistributeurCom,
             @RequestParam(value = "distributeurTech", required = false) final String distributeurTech,
+            @RequestParam(value = "nomDistributeurTech", required = false)  final String nomDistributeurTech,
             @RequestParam(value = "affichable", required = false) final Boolean affichable,
             @RequestParam(value = "diffusable", required = false) final Boolean diffusable,
-            @RequestParam(value = "elementsParPage", defaultValue = "32") final int elementsParPage,
+            @RequestParam(value = "ressourcesPerPage", defaultValue = "32") final int elementsParPage,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        log.debug(
-                "Ressources diffusables request. page: {}, elementsParPage: {}.",
-                page,
-                elementsParPage
-        );
         return this.mediacentreService.getRessourcesDiffusables(
                 page,
                 elementsParPage,
                 new RessourceDiffusableFilter(
-                    idRessource,
-                    nomRessource,
-                    idEditeur,
-                    distributeurCom,
-                    distributeurTech,
-                    affichable,
-                    diffusable
+                        operator,
+                        idRessource,
+                        nomRessource,
+                        idEditeur,
+                        nomEditeur,
+                        distributeurCom,
+                        nomDistributeurCom,
+                        distributeurTech,
+                        nomDistributeurTech,
+                        affichable,
+                        diffusable
                 )
         );
     }
 
     @GetMapping(value = "/ressources-diffusables/page-count")
     public int pageCount(
+            @RequestParam(value = "operator", required = false) final String operator,
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
             @RequestParam(value = "idEditeur", required = false) final String idEditeur,
+            @RequestParam(value = "nomEditeur", required = false)  final String nomEditeur,
             @RequestParam(value = "distributeurCom", required = false) final String distributeurCom,
+            @RequestParam(value = "nomDistributeurCom", required = false)  final String nomDistributeurCom,
             @RequestParam(value = "distributeurTech", required = false) final String distributeurTech,
+            @RequestParam(value = "nomDistributeurTech", required = false)  final String nomDistributeurTech,
             @RequestParam(value = "affichable", required = false) final Boolean affichable,
             @RequestParam(value = "diffusable", required = false) final Boolean diffusable,
-            @RequestParam(value = "elementsParPage", defaultValue = "32") final int elementsParPage,
+            @RequestParam(value = "ressourcesPerPage", defaultValue = "32") final int elementsParPage,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
@@ -71,11 +78,15 @@ public class ApiMediacentreController {
         return this.mediacentreService.getPageCount(
                 elementsParPage,
                 new RessourceDiffusableFilter(
+                        operator,
                         idRessource,
                         nomRessource,
                         idEditeur,
+                        nomEditeur,
                         distributeurCom,
+                        nomDistributeurCom,
                         distributeurTech,
+                        nomDistributeurTech,
                         affichable,
                         diffusable
                 )
@@ -84,11 +95,15 @@ public class ApiMediacentreController {
 
     @GetMapping(value = "/ressources-diffusables/size")
     public int size(
+            @RequestParam(value = "operator", required = false) final String operator,
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
             @RequestParam(value = "idEditeur", required = false) final String idEditeur,
+            @RequestParam(value = "nomEditeur", required = false)  final String nomEditeur,
             @RequestParam(value = "distributeurCom", required = false) final String distributeurCom,
+            @RequestParam(value = "nomDistributeurCom", required = false)  final String nomDistributeurCom,
             @RequestParam(value = "distributeurTech", required = false) final String distributeurTech,
+            @RequestParam(value = "nomDistributeurTech", required = false)  final String nomDistributeurTech,
             @RequestParam(value = "affichable", required = false) final Boolean affichable,
             @RequestParam(value = "diffusable", required = false) final Boolean diffusable,
             HttpServletRequest request,
@@ -97,11 +112,15 @@ public class ApiMediacentreController {
         log.debug("Nombre pages ressources diffusables request.");
         return this.mediacentreService.getSize(
                 new RessourceDiffusableFilter(
+                        operator,
                         idRessource,
                         nomRessource,
                         idEditeur,
+                        nomEditeur,
                         distributeurCom,
+                        nomDistributeurCom,
                         distributeurTech,
+                        nomDistributeurTech,
                         affichable,
                         diffusable
                 )
