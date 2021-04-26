@@ -10,10 +10,10 @@ server:
     include-message: always
     include-stacktrace: always
 
-logging:
-  level:
-    web: DEBUG
-    fr: DEBUG
+#logging:
+#  level:
+#    web: DEBUG
+#    fr: DEBUG
 
 spring:
   config:
