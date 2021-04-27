@@ -12,5 +12,8 @@
     <context:annotation-config/>
 
     <!-- ServiceGar -->
-    <bean id="serviceGar" class="fr.anael.apimediacentre.service.ServiceGarHttpGetCache"/>
+    <bean id="serviceGar" class="fr.anael.apimediacentre.service.gar.ServiceGarHttpGet"/>
+
+    <!-- ServiceCacheHistorique -->
+    <bean id="serviceCacheHistorique" class="fr.anael.apimediacentre.service.cache.ServiceCacheHistoriqueEhcache"/>
 </beans>

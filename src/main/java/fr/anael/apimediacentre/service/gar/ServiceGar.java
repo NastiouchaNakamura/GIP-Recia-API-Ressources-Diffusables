@@ -1,10 +1,12 @@
-package fr.anael.apimediacentre.service;
+package fr.anael.apimediacentre.service.gar;
 
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
 public interface ServiceGar {
     // Getteurs
     /**

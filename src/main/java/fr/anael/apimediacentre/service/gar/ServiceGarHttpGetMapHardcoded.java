@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.service;
+package fr.anael.apimediacentre.service.gar;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,6 +8,7 @@ import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Slf4j
-public class ServiceGarHttpGet implements ServiceGar {
+public class ServiceGarHttpGetMapHardcoded implements ServiceGar {
     // Attributs
     @Value("${mediacentre.ressources-diffusables-uri:}")
     private String ressourcesDiffusablesUri;

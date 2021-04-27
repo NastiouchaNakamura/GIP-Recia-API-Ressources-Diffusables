@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.service;
+package fr.anael.apimediacentre.service.gar;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.anael.apimediacentre.model.AttributRessource;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
+import fr.anael.apimediacentre.service.cache.ServiceCacheHistorique;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
@@ -26,8 +26,11 @@ import java.util.stream.Collectors;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Slf4j
-public class ServiceGarHttpGetCache implements ServiceGar {
+public class ServiceGarHttpGet implements ServiceGar {
     // Attributs
+    @Autowired
+    private ServiceCacheHistorique serviceCacheHistorique;
+
     @Value("${mediacentre.ressources-diffusables-uri:}")
     private String ressourcesDiffusablesUri;
 
@@ -66,10 +69,10 @@ public class ServiceGarHttpGetCache implements ServiceGar {
             log.debug("Ressources diffusables request: No filter; no need to check history");
             return this.ressourcesDiffusablesComplet;
         } else { // Soit il faut faire un filtrage. Il est peut-être historisé.
-            Element ressourcesDiffusablesHistoriseesElement = CacheManager.getInstance().getCache("cacheRessourcesDiffusables").get(filter);
-            if (ressourcesDiffusablesHistoriseesElement != null) {
+            List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.serviceCacheHistorique.get(filter);
+            if (ressourcesDiffusablesHistorisees != null) {
                 log.debug("Ressources diffusables request: Getting request result from history");
-                return (List<RessourceDiffusable>) ressourcesDiffusablesHistoriseesElement.getObjectValue();
+                return ressourcesDiffusablesHistorisees;
             } else {
                 List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
                 for (RessourceDiffusable ressourceDiffusable : this.ressourcesDiffusablesComplet) {
@@ -77,7 +80,7 @@ public class ServiceGarHttpGetCache implements ServiceGar {
                         ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
                     }
                 }
-                CacheManager.getInstance().getCache("cacheRessourcesDiffusables").put(new Element(filter, ressourcesDiffusablesFiltrees));
+                this.serviceCacheHistorique.put(filter, ressourcesDiffusablesFiltrees);
                 return ressourcesDiffusablesFiltrees;
             }
         }
@@ -127,7 +130,7 @@ public class ServiceGarHttpGetCache implements ServiceGar {
         }
 
         // Suppression de l'historique.
-        CacheManager.getInstance().getCache("cacheRessourcesDiffusables").removeAll();
+        this.serviceCacheHistorique.clear();
 
         // Fin de téléchargement
         log.info("Mediacentre file download: Mediacentre file successfully downloaded!");
@@ -259,7 +262,7 @@ public class ServiceGarHttpGetCache implements ServiceGar {
         }
 
         // Suppression de l'historique.
-        CacheManager.getInstance().getCache("cacheRessourcesDiffusables").removeAll();
+        this.serviceCacheHistorique.clear();
 
         // Fin de lecture.
         log.debug("Reading of Mediacentre file: Mediacentre file successfully read!");
