@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.anael.apimediacentre.model.AttributRessource;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
+import fr.anael.apimediacentre.service.cacheHistorique.ServiceCacheHistorique;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
@@ -29,6 +31,9 @@ public class ServiceGarHttpGet implements ServiceGar {
     @Value("${mediacentre.ressources-diffusables-uri:}")
     private String ressourcesDiffusablesUri;
 
+    @Autowired
+    private ServiceCacheHistorique serviceCacheHistorique;
+
     private final List<RessourceDiffusable> ressourcesDiffusablesComplet = new ArrayList<>();
 
     private File ressourcesDiffusablesFile = null;
@@ -38,13 +43,6 @@ public class ServiceGarHttpGet implements ServiceGar {
     private LocalDateTime dateTelechargement = null;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    private final LinkedHashMap<RessourceDiffusableFilter, List<RessourceDiffusable>> historiqueRequetes = new LinkedHashMap<>() {
-        @Override
-        protected boolean removeEldestEntry(final Map.Entry eldest) {
-            return size() > 10;
-        }
-    };
 
     // Getteurs
     @Override
@@ -71,7 +69,7 @@ public class ServiceGarHttpGet implements ServiceGar {
             log.debug("Ressources diffusables request: No filter; no need to check history");
             return this.ressourcesDiffusablesComplet;
         } else { // Soit il faut faire un filtrage. Il est peut-être historisé.
-            List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.historiqueRequetes.get(filter);
+            List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.serviceCacheHistorique.get(filter);
             if (ressourcesDiffusablesHistorisees != null) {
                 log.debug("Ressources diffusables request: Getting request result from history");
                 return ressourcesDiffusablesHistorisees;
@@ -82,8 +80,7 @@ public class ServiceGarHttpGet implements ServiceGar {
                         ressourcesDiffusablesFiltrees.add(ressourceDiffusable);
                     }
                 }
-                log.debug("Ressources diffusables request: Putting request result in history; new size of history will be " + Math.min(this.historiqueRequetes.size() + 1, 6));
-                this.historiqueRequetes.put(filter, ressourcesDiffusablesFiltrees);
+                this.serviceCacheHistorique.put(filter, ressourcesDiffusablesFiltrees);
                 return ressourcesDiffusablesFiltrees;
             }
         }
@@ -133,7 +130,7 @@ public class ServiceGarHttpGet implements ServiceGar {
         }
 
         // Suppression de l'historique.
-        this.historiqueRequetes.clear();
+        this.serviceCacheHistorique.clear();
 
         // Fin de téléchargement
         log.info("Mediacentre file download: Mediacentre file successfully downloaded!");
@@ -265,7 +262,7 @@ public class ServiceGarHttpGet implements ServiceGar {
         }
 
         // Suppression de l'historique.
-        this.historiqueRequetes.clear();
+        this.serviceCacheHistorique.clear();
 
         // Fin de lecture.
         log.debug("Reading of Mediacentre file: Mediacentre file successfully read!");
