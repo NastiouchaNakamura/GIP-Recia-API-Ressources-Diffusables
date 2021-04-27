@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Cache ###
-cache-api-mediacentre/
+cache-api-mediacentre
