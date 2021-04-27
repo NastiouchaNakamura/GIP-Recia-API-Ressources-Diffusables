@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.service;
+package fr.anael.apimediacentre.service.gar;
 
 import fr.anael.apimediacentre.model.AttributRessource;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class MediacentreServiceStatique implements MediacentreService {
+public class ServiceGarStatique implements ServiceGar {
     // Attributs
     private final List<RessourceDiffusable> ressourcesDiffusablesComplet = new ArrayList<>();
 

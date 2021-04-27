@@ -2,7 +2,7 @@ package fr.anael.apimediacentre.controller;
 
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
-import fr.anael.apimediacentre.service.MediacentreService;
+import fr.anael.apimediacentre.service.gar.ServiceGar;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import java.util.Collection;
 public class ApiMediacentreController {
     // Attributs
     @Autowired
-    private MediacentreService mediacentreService;
+    private ServiceGar serviceGar;
 
     // Méthodes
     @GetMapping(value = "/ressources-diffusables")
@@ -38,7 +38,7 @@ public class ApiMediacentreController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        return this.mediacentreService.getRessourcesDiffusables(
+        return this.serviceGar.getRessourcesDiffusables(
                 page,
                 elementsParPage,
                 new RessourceDiffusableFilter(
@@ -75,7 +75,7 @@ public class ApiMediacentreController {
             HttpServletResponse response
     ) {
         log.debug("Nombre pages ressources diffusables request.");
-        return this.mediacentreService.getPageCount(
+        return this.serviceGar.getPageCount(
                 elementsParPage,
                 new RessourceDiffusableFilter(
                         operator,
@@ -110,7 +110,7 @@ public class ApiMediacentreController {
             HttpServletResponse response
     ) {
         log.debug("Nombre pages ressources diffusables request.");
-        return this.mediacentreService.getSize(
+        return this.serviceGar.getSize(
                 new RessourceDiffusableFilter(
                         operator,
                         idRessource,

@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.service;
+package fr.anael.apimediacentre.service.gar;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Slf4j
-public class MediacentreServiceHttpGet implements MediacentreService {
+public class ServiceGarHttpGet implements ServiceGar {
     // Attributs
     @Value("${mediacentre.ressources-diffusables-uri:}")
     private String ressourcesDiffusablesUri;
