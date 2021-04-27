@@ -1,8 +1,9 @@
 package fr.anael.apimediacentre.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class AttributRessource {
+public class AttributRessource implements Serializable {
     // Attributs
     private final String id;
     private final String nom;

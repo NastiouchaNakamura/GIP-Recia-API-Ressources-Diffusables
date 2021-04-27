@@ -2,11 +2,12 @@ package fr.anael.apimediacentre.model;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.Locale;
 import java.util.Objects;
 
-public class RessourceDiffusableFilter {
+public class RessourceDiffusableFilter implements Serializable {
     // Attributs
     private enum Operator { AND, OR }
     private final Operator operator;

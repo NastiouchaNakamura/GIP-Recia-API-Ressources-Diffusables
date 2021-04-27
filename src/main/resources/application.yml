@@ -10,11 +10,14 @@ server:
     include-message: always
     include-stacktrace: always
 
-#logging:
-#  level:
-#    web: DEBUG
-#    fr: DEBUG
+logging:
+  level:
+    web: DEBUG
+    fr: DEBUG
 
 spring:
   config:
     import: classpath:private.yml
+  cache:
+    jcache:
+      config: classpath:ehcache.xml

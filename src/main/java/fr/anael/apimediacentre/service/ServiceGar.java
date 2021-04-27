@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.service.gar;
+package fr.anael.apimediacentre.service;
 
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;

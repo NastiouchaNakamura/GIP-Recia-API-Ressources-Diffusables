@@ -2,7 +2,7 @@ package fr.anael.apimediacentre.controller;
 
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
-import fr.anael.apimediacentre.service.gar.ServiceGar;
+import fr.anael.apimediacentre.service.ServiceGar;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
