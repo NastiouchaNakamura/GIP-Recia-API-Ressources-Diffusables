@@ -58,60 +58,18 @@ public class ServiceGarStatique implements ServiceGar {
 
     // Méthodes
     private void initialize() {
-        this.ajouterRessource(
-                new RessourceDiffusable(
-                        new AttributRessource(
-                                "ark/86527/049777635741477512036823067623231707978",
-                                "Outils et langages numériques - Première Spécialité - Voie Technologique - STD2A (Tactileo Maskott)"
-                        ),
-                        new AttributRessource(
-                                "479875718_0000000000000000",
-                                ""
-                        ),
-                        Arrays.asList(
-                                new AttributRessource(
-                                        "479875718_0000000000000000",
-                                        ""
-                                )
-                        ),
-                        new AttributRessource(
-                                "479875718_0000000000000000",
-                                ""
-                        ),
-                        true,
-                        true
-
-                )
-        );
-
         for (int i = 0; i < 100; i++) {
             this.ajouterRessource(
                     new RessourceDiffusable(
-                            new AttributRessource(
-                                    "idRessource." + i,
-                                    "nomRessource." + i
-                            ),
-                            new AttributRessource(
-                                    "idEditeur." + i,
-                                    ""
-                            ),
+                            new AttributRessource("idRessource." + i, "nomRessource." + i),
+                            new AttributRessource("idEditeur." + i, ""),
                             Arrays.asList(
-                                    new AttributRessource(
-                                            "distributeurCom." + i + ".1",
-                                            ""
-                                    ),
-                                    new AttributRessource(
-                                            "distributeurCom." + i + ".2",
-                                            ""
-                                    )
+                                    new AttributRessource("distributeurCom." + i + ".1", ""),
+                                    new AttributRessource("distributeurCom." + i + ".2", "")
                             ),
-                            new AttributRessource(
-                                    "distributeurTech." + i,
-                                    ""
-                            ),
+                            new AttributRessource("distributeurTech." + i, ""),
                             true,
                             true
-
                     )
             );
         }
