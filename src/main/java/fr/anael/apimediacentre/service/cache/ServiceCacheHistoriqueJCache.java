@@ -1,14 +1,12 @@
 package fr.anael.apimediacentre.service.cache;
 
 import com.hazelcast.config.CacheConfig;
-import com.hazelcast.config.EvictionConfig;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
-import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 import java.util.List;
 
