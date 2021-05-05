@@ -48,6 +48,6 @@ public class ServiceCacheHistoriqueJCache implements ServiceCacheHistorique {
 
     @Override
     public void clear() {
-
+        this.cache.clear();
     }
 }
