@@ -50,13 +50,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .addFilter(filter)
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                    .antMatchers("/health-check").anonymous()
+                    .antMatchers("/api/**").authenticated()
+                    .anyRequest().permitAll()
                 .and() // pour la dev en localhost autorisation du cross domaine
-                .cors()
-                .configurationSource(corsConfigurationSource())
+                    .cors()
+                    .configurationSource(
+                            corsConfigurationSource()
+                    )
                 .and()
-                .sessionManagement()
-                .sessionFixation().none();
+                    .sessionManagement()
+                        .sessionFixation()
+                            .none();
     }
 
     @Bean
