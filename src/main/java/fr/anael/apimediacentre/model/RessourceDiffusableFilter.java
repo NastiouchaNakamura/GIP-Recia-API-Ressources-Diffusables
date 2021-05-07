@@ -1,7 +1,5 @@
 package fr.anael.apimediacentre.model;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.Locale;

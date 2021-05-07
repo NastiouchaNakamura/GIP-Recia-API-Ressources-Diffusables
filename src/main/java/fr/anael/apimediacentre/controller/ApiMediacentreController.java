@@ -38,6 +38,7 @@ public class ApiMediacentreController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
+        if(log.isDebugEnabled()) log.debug("Ressources diffusables request.");
         return this.serviceGar.getRessourcesDiffusables(
                 page,
                 elementsParPage,
@@ -74,7 +75,7 @@ public class ApiMediacentreController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        log.debug("Nombre pages ressources diffusables request.");
+        if(log.isDebugEnabled()) log.debug("Nombre pages ressources diffusables request.");
         return this.serviceGar.getPageCount(
                 elementsParPage,
                 new RessourceDiffusableFilter(
@@ -109,7 +110,7 @@ public class ApiMediacentreController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        log.debug("Nombre pages ressources diffusables request.");
+        if(log.isDebugEnabled()) log.debug("Nombre éléments ressources diffusables request.");
         return this.serviceGar.getSize(
                 new RessourceDiffusableFilter(
                         operator,

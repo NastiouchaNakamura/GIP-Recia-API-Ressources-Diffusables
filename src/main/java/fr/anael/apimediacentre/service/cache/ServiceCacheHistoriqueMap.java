@@ -3,7 +3,6 @@ package fr.anael.apimediacentre.service.cache;
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ServiceCacheHistoriqueMap implements ServiceCacheHistorique {
 
     @Override
     public void put(RessourceDiffusableFilter filter, List<RessourceDiffusable> ressourcesDiffusables) {
-        log.debug("Cache: Ressource diffusable put in history using HashMap; new size of history is " + this.historiqueRequetes.size());
+        if(log.isDebugEnabled()) log.debug("Cache: Ressource diffusable put in history using HashMap; new size of history is " + this.historiqueRequetes.size());
         this.historiqueRequetes.put(filter, ressourcesDiffusables);
     }
 
@@ -40,6 +39,6 @@ public class ServiceCacheHistoriqueMap implements ServiceCacheHistorique {
     public void clear() {
         int count = this.historiqueRequetes.size();
         this.historiqueRequetes.clear();
-        log.debug("Cache: History cleared using HashMap; " + count + " elements removed");
+        if(log.isDebugEnabled()) log.debug("Cache: History cleared using HashMap; " + count + " elements removed");
     }
 }

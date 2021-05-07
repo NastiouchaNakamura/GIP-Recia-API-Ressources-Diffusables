@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        log.debug("configure signatureKey = {}", this.signatureKey);
+        if(log.isDebugEnabled()) log.debug("configure signatureKey = {}", this.signatureKey);
         final AbstractPreAuthenticatedProcessingFilter filter =
                 new SoffitApiPreAuthenticatedProcessingFilter(this.signatureKey);
 

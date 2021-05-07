@@ -66,12 +66,12 @@ public class ServiceGarHttpGet implements ServiceGar {
         this.verifValidite();
 
         if (filter.isEmpty()) { // Soit le filtre est vide...
-            log.debug("Ressources diffusables request: No filter; no need to check history");
+            if(log.isDebugEnabled()) log.debug("Ressources diffusables request: No filter; no need to check history");
             return this.ressourcesDiffusablesComplet;
         } else { // Soit il faut faire un filtrage. Il est peut-être historisé.
             List<RessourceDiffusable> ressourcesDiffusablesHistorisees = this.serviceCacheHistorique.get(filter);
             if (ressourcesDiffusablesHistorisees != null) {
-                log.debug("Ressources diffusables request: Getting request result from history");
+                if(log.isDebugEnabled()) log.debug("Ressources diffusables request: Getting request result from history");
                 return ressourcesDiffusablesHistorisees;
             } else {
                 List<RessourceDiffusable> ressourcesDiffusablesFiltrees = new ArrayList<>();
@@ -108,7 +108,7 @@ public class ServiceGarHttpGet implements ServiceGar {
     private void telechargerFichier() {
         // Début de téléchargement.
         log.info("Mediacentre file download: Starting download procedure");
-        log.debug("Mediacentre file download: URL is {}", this.ressourcesDiffusablesUri);
+        if(log.isDebugEnabled()) log.debug("Mediacentre file download: URL is {}", this.ressourcesDiffusablesUri);
 
         try {
             URL website = new URL(this.ressourcesDiffusablesUri);
@@ -137,8 +137,8 @@ public class ServiceGarHttpGet implements ServiceGar {
     }
 
     private void lireFichier() {
-        log.debug("Reading of Mediacentre file: Starting reading procedure");
-        log.debug("Reading of Mediacentre file: file is at {}", this.ressourcesDiffusablesFile.getAbsolutePath());
+        if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: Starting reading procedure");
+        if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: file is at {}", this.ressourcesDiffusablesFile.getAbsolutePath());
 
         try {
             // Lecture du JSON.
@@ -152,14 +152,14 @@ public class ServiceGarHttpGet implements ServiceGar {
                     jsonNode.get("dateGeneration").asText().replaceAll(" ", ""),
                     DateTimeFormatter.ISO_DATE_TIME
             );
-            log.debug(
+            if(log.isDebugEnabled()) log.debug(
                     "Reading of Mediacentre file: Mediacentre file generation date: {}",
                     DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss").format(dateGeneration)
             );
 
             // Est-ce que cela est utile de le relire ?
             if (this.dateGeneration != null && dateGeneration.isEqual(this.dateGeneration)) {
-                log.debug("Reading of Mediacentre file: The file that has been previously read and the file currently read are the same; stopping the reading procedure");
+                if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: The file that has been previously read and the file currently read are the same; stopping the reading procedure");
                 return;
             } else {
                 this.dateGeneration = dateGeneration;
@@ -265,6 +265,6 @@ public class ServiceGarHttpGet implements ServiceGar {
         this.serviceCacheHistorique.clear();
 
         // Fin de lecture.
-        log.debug("Reading of Mediacentre file: Mediacentre file successfully read!");
+        if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: Mediacentre file successfully read!");
     }
 }

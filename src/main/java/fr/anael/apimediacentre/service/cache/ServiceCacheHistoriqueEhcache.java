@@ -24,7 +24,7 @@ public class ServiceCacheHistoriqueEhcache implements ServiceCacheHistorique{
     @Override
     public void put(RessourceDiffusableFilter filter, List<RessourceDiffusable> ressourcesDiffusables) {
         this.cache.put(new Element(filter, ressourcesDiffusables));
-        log.debug("Cache: Ressource diffusable put in history using Ehcache; new size of history is " + this.cache.getSize());
+        if(log.isDebugEnabled()) log.debug("Cache: Ressource diffusable put in history using Ehcache; new size of history is " + this.cache.getSize());
     }
 
     @Override
@@ -36,6 +36,6 @@ public class ServiceCacheHistoriqueEhcache implements ServiceCacheHistorique{
     public void clear() {
         int count = this.cache.getSize();
         this.cache.removeAll();
-        log.debug("Cache: History cleared using Ehcache; " + count + " elements removed");
+        if(log.isDebugEnabled()) log.debug("Cache: History cleared using Ehcache; " + count + " elements removed");
     }
 }
