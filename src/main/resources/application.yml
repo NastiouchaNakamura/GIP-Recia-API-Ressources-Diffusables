@@ -2,7 +2,7 @@ server:
   port: 8090
   address: localhost
   servlet:
-    context-path: /mediacentre
+    context-path: /spring-api
   error:
     whitelabel.enabled: true
     include-binding-errors: always
