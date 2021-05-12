@@ -88,48 +88,44 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
         if(log.isWarnEnabled()) log.warn("CORS ABILITATI! CORS est autorisé");
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(
-                Arrays.asList(
-                        "http://localhost:8080",
-                        "http://192.168.36.10:8080/",
-                        "http://192.168.45.196:8080",
-                        "http://192.168.45.156:8080",
-                        "https://test-lycee.giprecia.net"
-                )
-        );
-        configuration.setAllowedMethods(
-                Arrays.asList(
-                        RequestMethod.GET.name(),
-                        RequestMethod.POST.name(),
-                        RequestMethod.OPTIONS.name(),
-                        RequestMethod.DELETE.name(),
-                        RequestMethod.PUT.name()
-                )
-        );
 
-        configuration.setExposedHeaders(
-                Arrays.asList(
-                        "x-auth-token",
-                        "x-requested-with",
-                        "x-xsrf-token"
-                )
-        );
-        configuration.setAllowedHeaders(
-                Arrays.asList(
-                        "content-type",
-                        "authorization",
-                        "x-com-persist",
-                        "X-Auth-Token",
-                        "x-auth-token",
-                        "x-requested-with",
-                        "x-xsrf-token"
-                )
-        );
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:8080",
+                "http://192.168.36.10:8080/",
+                "http://192.168.45.196:8080",
+                "http://192.168.45.156:8080",
+                "https://test-lycee.giprecia.net"
+        ));
+
+        configuration.setAllowedMethods(Arrays.asList(
+                RequestMethod.GET.name(),
+                RequestMethod.POST.name(),
+                RequestMethod.OPTIONS.name(),
+                RequestMethod.DELETE.name(),
+                RequestMethod.PUT.name()
+        ));
+
+        configuration.setExposedHeaders(Arrays.asList(
+                "x-auth-token",
+                "x-requested-with",
+                "x-xsrf-token"
+        ));
+
+        configuration.setAllowedHeaders(Arrays.asList(
+                "content-type",
+                "authorization",
+                "x-com-persist",
+                "X-Auth-Token",
+                "x-auth-token",
+                "x-requested-with",
+                "x-xsrf-token"
+        ));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
