@@ -1,6 +1,5 @@
 server:
   port: 8090
-  address: localhost
   servlet:
     context-path: /spring-api
   error:
