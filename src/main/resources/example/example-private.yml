@@ -1,0 +1,5 @@
+soffit:
+  jwt.signatureKey: ''
+
+mediacentre:
+  ressources-diffusables-uri: ''
