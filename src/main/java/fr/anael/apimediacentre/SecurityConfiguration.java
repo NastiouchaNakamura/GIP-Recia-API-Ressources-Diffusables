@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.support.ErrorPageFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -51,13 +52,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(filter)
                 .authorizeRequests()
                     .antMatchers("/health-check").anonymous()
-                    .antMatchers("/api/**").authenticated()
-                    .anyRequest().permitAll()
-                .and() // pour la dev en localhost autorisation du cross domaine
+                    .antMatchers(HttpMethod.GET, "/api/**").authenticated()
+                    .anyRequest().denyAll()
+                .and()
                     .cors()
-                    .configurationSource(
-                            corsConfigurationSource()
-                    )
+                    .configurationSource(corsConfigurationSource())
                 .and()
                     .sessionManagement()
                         .sessionFixation()
@@ -90,14 +89,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         if(log.isWarnEnabled()) log.warn("CORS ABILITATI! CORS est autorisé");
 
-        CorsConfiguration configuration = new CorsConfiguration();
+        final CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowCredentials(true);
 
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:8080",
-                "http://192.168.36.10:8080/",
+                "http://192.168.36.10:8080",
                 "http://192.168.45.196:8080",
                 "http://192.168.45.156:8080",
                 "https://test-lycee.giprecia.net"
+        ));
+
+        configuration.setExposedHeaders(Arrays.asList(
+                        "x-auth-token",
+                        "x-requested-with",
+                        "x-xsrf-token"
+        ));
+
+        configuration.setAllowedHeaders(Arrays.asList(
+                        "content-type",
+                        "authorization",
+                        "x-com-persist",
+                        "X-Auth-Token",
+                        "x-auth-token",
+                        "x-requested-with",
+                        "x-xsrf-token"
         ));
 
         configuration.setAllowedMethods(Arrays.asList(
@@ -108,23 +125,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 RequestMethod.PUT.name()
         ));
 
-        configuration.setExposedHeaders(Arrays.asList(
-                "x-auth-token",
-                "x-requested-with",
-                "x-xsrf-token"
-        ));
-
-        configuration.setAllowedHeaders(Arrays.asList(
-                "content-type",
-                "authorization",
-                "x-com-persist",
-                "X-Auth-Token",
-                "x-auth-token",
-                "x-requested-with",
-                "x-xsrf-token"
-        ));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", configuration);
 
