@@ -18,13 +18,12 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.Filter;
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -32,6 +31,24 @@ import java.util.Arrays;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${soffit.jwt.signatureKey:Changeme}")
     private String signatureKey;
+
+    @Value("${cors.enable}")
+    private Boolean corsEnable;
+
+    @Value("${cors.allow-credentials}")
+    private Boolean corsAllowCredentials;
+
+    @Value("${cors.allowed-origins}")
+    private List<String> corsAllowedOrigins;
+
+    @Value("${cors.exposed-headers}")
+    private List<String> corsExposedHeaders;
+
+    @Value("${cors.allowed-headers}")
+    private List<String> corsAllowedHeaders;
+
+    @Value("${cors.allowed-methods}")
+    private List<String> corsAllowedMethods;
 
     @Override
     public void configure(WebSecurity web) {
@@ -87,47 +104,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        if(log.isWarnEnabled()) log.warn("CORS ABILITATI! CORS est autorisé");
-
-        final CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowCredentials(true);
-
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8080",
-                "http://192.168.36.10:8080",
-                "http://192.168.45.196:8080",
-                "http://192.168.45.156:8080",
-                "https://test-lycee.giprecia.net"
-        ));
-
-        configuration.setExposedHeaders(Arrays.asList(
-                        "x-auth-token",
-                        "x-requested-with",
-                        "x-xsrf-token"
-        ));
-
-        configuration.setAllowedHeaders(Arrays.asList(
-                        "content-type",
-                        "authorization",
-                        "x-com-persist",
-                        "X-Auth-Token",
-                        "x-auth-token",
-                        "x-requested-with",
-                        "x-xsrf-token"
-        ));
-
-        configuration.setAllowedMethods(Arrays.asList(
-                RequestMethod.GET.name(),
-                RequestMethod.POST.name(),
-                RequestMethod.OPTIONS.name(),
-                RequestMethod.DELETE.name(),
-                RequestMethod.PUT.name()
-        ));
-
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", configuration);
+        if (this.corsEnable) {
+            if(log.isWarnEnabled()) log.warn("CORS ABILITATI! CORS est autorisé");
+
+            final CorsConfiguration configuration = new CorsConfiguration();
+
+            configuration.setAllowCredentials(this.corsAllowCredentials);
+            configuration.setAllowedOrigins(this.corsAllowedOrigins);
+            configuration.setExposedHeaders(this.corsExposedHeaders);
+            configuration.setAllowedHeaders(this.corsAllowedHeaders);
+            configuration.setAllowedMethods(this.corsAllowedMethods);
+
+            source.registerCorsConfiguration("/**", configuration);
+        }
 
         return source;
     }

@@ -16,7 +16,9 @@ server:
 
 spring:
   config:
-    import: classpath:private.yml
+    import:
+      - classpath:private.yml
+      - classpath:cors.yml
   cache:
     jcache:
       config: classpath:ehcache.xml
