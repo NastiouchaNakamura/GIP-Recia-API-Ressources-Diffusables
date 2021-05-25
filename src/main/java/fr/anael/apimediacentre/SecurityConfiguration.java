@@ -29,25 +29,25 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Value("${soffit.jwt.signatureKey:Changeme}")
+    @Value("${security-configuration.soffit.jwt.signatureKey:Changeme}")
     private String signatureKey;
 
-    @Value("${cors.enable}")
+    @Value("${security-configuration.cors.enable}")
     private Boolean corsEnable;
 
-    @Value("${cors.allow-credentials}")
+    @Value("${security-configuration.cors.allow-credentials}")
     private Boolean corsAllowCredentials;
 
-    @Value("${cors.allowed-origins}")
+    @Value("${security-configuration.cors.allowed-origins}")
     private List<String> corsAllowedOrigins;
 
-    @Value("${cors.exposed-headers}")
+    @Value("${security-configuration.cors.exposed-headers}")
     private List<String> corsExposedHeaders;
 
-    @Value("${cors.allowed-headers}")
+    @Value("${security-configuration.cors.allowed-headers}")
     private List<String> corsAllowedHeaders;
 
-    @Value("${cors.allowed-methods}")
+    @Value("${security-configuration.cors.allowed-methods}")
     private List<String> corsAllowedMethods;
 
     @Override

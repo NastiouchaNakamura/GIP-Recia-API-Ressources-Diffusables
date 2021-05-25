@@ -31,8 +31,11 @@ public class ServiceGarHttpGet implements ServiceGar {
     @Autowired
     private ServiceCacheHistorique serviceCacheHistorique;
 
-    @Value("${mediacentre.ressources-diffusables-uri:}")
+    @Value("${service-gar-http-get.ressources-diffusables-uri:}")
     private String ressourcesDiffusablesUri;
+
+    @Value("${service-gar-http-get.download-location-path}")
+    private String downloadLocationPath;
 
     private final List<RessourceDiffusable> ressourcesDiffusablesComplet = new ArrayList<>();
 
@@ -115,11 +118,11 @@ public class ServiceGarHttpGet implements ServiceGar {
 
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 
-            FileOutputStream fos = new FileOutputStream("src/main/resources/downloads/mediacentre.json");
+            FileOutputStream fos = new FileOutputStream(this.downloadLocationPath);
 
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-            this.ressourcesDiffusablesFile = new File("src/main/resources/downloads/mediacentre.json");
+            this.ressourcesDiffusablesFile = new File(this.downloadLocationPath);
             this.dateTelechargement = LocalDateTime.now();
         } catch (MalformedURLException malformedURLException) {
             log.error("Mediacentre file download: malformed URL exception");

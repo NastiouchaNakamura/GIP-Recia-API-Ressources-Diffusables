@@ -1,0 +1,49 @@
+{
+  "properties": [
+    {
+      "name": "security-configuration.cors.enable",
+      "type": "java.lang.Boolean",
+      "description": "Active ou désactive la configuration CORS."
+    },
+    {
+      "name": "security-configuration.cors.allow-credentials",
+      "type": "java.lang.Boolean",
+      "description": "Paramètre setAllowCredentials du CorsConfiguration."
+    },
+    {
+      "name": "security-configuration.cors.allowed-origins",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Liste des origines autorisées du CorsConfiguration."
+    },
+    {
+      "name": "security-configuration.cors.exposed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Listes des headers exposés du CorsConfiguration."
+    },
+    {
+      "name": "security-configuration.cors.allowed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Liste des headers autorisés du du CorsConfiguration."
+    },
+    {
+      "name": "security-configuration.cors.allowed-methods",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Listes des méthodes HTTP autorisées du CorsConfiguration (en majuscules)."
+    },
+    {
+      "name": "security-configuration.soffit.jwt.signatureKey",
+      "type": "java.lang.String",
+      "description": "La JWT Signature Key du portail."
+    },
+    {
+      "name": "service-gar-http-get.ressources-diffusables-uri",
+      "type": "java.lang.String",
+      "description": "URI à partir de laquelle on accède au fichier des ressources diffusables."
+    },
+    {
+      "name": "service-gar-http-get.download-location-path",
+      "type": "java.lang.String",
+      "description": "Emplacement vers lequel enregistrer le fichier une fois téléchargé (il sera toujours en JSON)."
+    }
+  ]
+}

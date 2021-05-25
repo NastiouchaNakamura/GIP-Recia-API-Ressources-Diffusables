@@ -15,10 +15,34 @@ server:
 #    fr: DEBUG
 
 spring:
-  config:
-    import:
-      - classpath:private.yml
-      - classpath:cors.yml
-  cache:
-    jcache:
-      config: classpath:ehcache.xml
+  cache.jcache.config: classpath:ehcache.xml
+  config.import: classpath:private.yml # Variables privées à ne pas diffuser.
+
+service-gar-http-get:
+  ressources-diffusables-uri: '=== Ressources Diffusables URI ===' # Variable privée surchargée dans private.yml.
+  download-location-path: 'src/main/resources/downloads/mediacentre.json' # Le fichier sera toujours JSON.
+
+security-configuration:
+  soffit:
+    jwt.signatureKey: '=== Signature Key ===' # Variable privée surchargée dans private.yml.
+  cors:
+    enable: true
+    allow-credentials: true
+    allowed-origins: > # IP = PC de Anaël via VPN.
+      http://localhost:8080,
+      http://192.168.36.10:8080,
+      https://*.giprecia.net
+    exposed-headers: >
+      x-auth-token,
+      x-requested-with,
+      x-xsrf-token
+    allowed-headers: >
+      content-type,
+      authorization,
+      x-com-persist,
+      X-Auth-Token,
+      x-auth-token,
+      x-requested-with,
+      x-xsrf-token
+    allowed-methods: > # Majuscules.
+      GET
