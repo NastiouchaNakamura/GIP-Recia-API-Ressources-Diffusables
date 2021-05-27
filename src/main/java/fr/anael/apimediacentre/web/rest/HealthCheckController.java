@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.controller;
+package fr.anael.apimediacentre.web.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

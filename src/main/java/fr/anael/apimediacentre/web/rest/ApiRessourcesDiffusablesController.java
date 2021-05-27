@@ -1,4 +1,4 @@
-package fr.anael.apimediacentre.controller;
+package fr.anael.apimediacentre.web.rest;
 
 import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
@@ -14,7 +14,7 @@ import java.util.Collection;
 @Slf4j
 @RestController
 @RequestMapping(path = "api/")
-public class ApiMediacentreController {
+public class ApiRessourcesDiffusablesController {
     // Attributs
     @Autowired
     private ServiceGar serviceGar;
