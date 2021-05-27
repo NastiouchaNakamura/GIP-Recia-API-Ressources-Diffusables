@@ -110,8 +110,8 @@ public class ServiceGarHttpGet implements ServiceGar {
 
     private void telechargerFichier() {
         // Début de téléchargement.
-        log.info("Mediacentre file download: Starting download procedure");
-        if(log.isDebugEnabled()) log.debug("Mediacentre file download: URL is {}", this.ressourcesDiffusablesUri);
+        log.info("Ressources diffusables source file download: Starting download procedure");
+        if(log.isDebugEnabled()) log.debug("Ressources diffusables source file download: URL is {}", this.ressourcesDiffusablesUri);
 
         try {
             URL website = new URL(this.ressourcesDiffusablesUri);
@@ -125,10 +125,10 @@ public class ServiceGarHttpGet implements ServiceGar {
             this.ressourcesDiffusablesFile = new File(this.downloadLocationPath);
             this.dateTelechargement = LocalDateTime.now();
         } catch (MalformedURLException malformedURLException) {
-            log.error("Mediacentre file download: malformed URL exception");
+            log.error("Ressources diffusables source file download: malformed URL exception");
             malformedURLException.printStackTrace();
         } catch (IOException ioException) {
-            log.error("Mediacentre file download: IO exception");
+            log.error("Ressources diffusables source file download: IO exception");
             ioException.printStackTrace();
         }
 
@@ -136,12 +136,12 @@ public class ServiceGarHttpGet implements ServiceGar {
         this.serviceCacheHistorique.clear();
 
         // Fin de téléchargement
-        log.info("Mediacentre file download: Mediacentre file successfully downloaded!");
+        log.info("Ressources diffusables source file download: ressources diffusables source file successfully downloaded!");
     }
 
     private void lireFichier() {
-        if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: Starting reading procedure");
-        if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: file is at {}", this.ressourcesDiffusablesFile.getAbsolutePath());
+        if(log.isDebugEnabled()) log.debug("Reading of ressources diffusables source file: Starting reading procedure");
+        if(log.isDebugEnabled()) log.debug("Reading of ressources diffusables source file: file is at {}", this.ressourcesDiffusablesFile.getAbsolutePath());
 
         try {
             // Lecture du JSON.
@@ -156,13 +156,13 @@ public class ServiceGarHttpGet implements ServiceGar {
                     DateTimeFormatter.ISO_DATE_TIME
             );
             if(log.isDebugEnabled()) log.debug(
-                    "Reading of Mediacentre file: Mediacentre file generation date: {}",
+                    "Reading of ressources diffusables source file: Ressources diffusables source file generation date: {}",
                     DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss").format(dateGeneration)
             );
 
             // Est-ce que cela est utile de le relire ?
             if (this.dateGeneration != null && dateGeneration.isEqual(this.dateGeneration)) {
-                if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: The file that has been previously read and the file currently read are the same; stopping the reading procedure");
+                if(log.isDebugEnabled()) log.debug("Reading of ressources diffusables source file: The file that has been previously read and the file currently read are the same; stopping the reading procedure");
                 return;
             } else {
                 this.dateGeneration = dateGeneration;
@@ -257,10 +257,10 @@ public class ServiceGarHttpGet implements ServiceGar {
                 );
             }
         } catch (JsonProcessingException e) {
-            log.error("Reading of Mediacentre file: JSON processing exception");
+            log.error("Reading of ressources diffusables source file: JSON processing exception");
             e.printStackTrace();
         } catch (IOException ioException) {
-            log.error("Reading of Mediacentre file: IO exception");
+            log.error("Reading of ressources diffusables source file: IO exception");
             ioException.printStackTrace();
         }
 
@@ -268,6 +268,6 @@ public class ServiceGarHttpGet implements ServiceGar {
         this.serviceCacheHistorique.clear();
 
         // Fin de lecture.
-        if(log.isDebugEnabled()) log.debug("Reading of Mediacentre file: Mediacentre file successfully read!");
+        if(log.isDebugEnabled()) log.debug("Reading of ressources diffusables source file: Ressources diffusables source file successfully read!");
     }
 }
