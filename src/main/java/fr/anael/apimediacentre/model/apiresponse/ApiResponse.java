@@ -2,9 +2,7 @@ package fr.anael.apimediacentre.model.apiresponse;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.lang.reflect.TypeVariable;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 public class ApiResponse {
     // Attributs
