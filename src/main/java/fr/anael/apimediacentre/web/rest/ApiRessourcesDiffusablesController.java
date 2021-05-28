@@ -144,7 +144,7 @@ public class ApiRessourcesDiffusablesController {
             MissingServletRequestParameterException.class,
             MethodArgumentTypeMismatchException.class
     })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     public ApiResponse handleExceptionMissingParameter(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -159,7 +159,7 @@ public class ApiRessourcesDiffusablesController {
     @ExceptionHandler(
             Exception.class
     )
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
     public ApiResponse handleExceptionElse(
             HttpServletRequest request,
             HttpServletResponse response,
