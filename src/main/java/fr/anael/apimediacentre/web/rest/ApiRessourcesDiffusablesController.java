@@ -1,15 +1,18 @@
 package fr.anael.apimediacentre.web.rest;
 
-import fr.anael.apimediacentre.model.RessourceDiffusable;
 import fr.anael.apimediacentre.model.RessourceDiffusableFilter;
+import fr.anael.apimediacentre.model.apiresponse.ApiError;
+import fr.anael.apimediacentre.model.apiresponse.ApiResponse;
 import fr.anael.apimediacentre.service.gar.ServiceGar;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
 
 @Slf4j
 @RestController
@@ -21,7 +24,7 @@ public class ApiRessourcesDiffusablesController {
 
     // Méthodes
     @GetMapping(value = "/ressources-diffusables")
-    public Collection<RessourceDiffusable> ressourcesDiffusables(
+    public ApiResponse ressourcesDiffusables(
             @RequestParam(value = "page") final int page,
             @RequestParam(value = "operator", required = false) final String operator,
             @RequestParam(value = "idRessource", required = false) final String idRessource,
@@ -39,27 +42,30 @@ public class ApiRessourcesDiffusablesController {
             HttpServletResponse response
     ) {
         if(log.isDebugEnabled()) log.debug("Ressources diffusables request.");
-        return this.serviceGar.getRessourcesDiffusables(
-                page,
-                elementsParPage,
-                new RessourceDiffusableFilter(
-                        operator,
-                        idRessource,
-                        nomRessource,
-                        idEditeur,
-                        nomEditeur,
-                        distributeurCom,
-                        nomDistributeurCom,
-                        distributeurTech,
-                        nomDistributeurTech,
-                        affichable,
-                        diffusable
+        return new ApiResponse(
+                "Ressources diffusables request successful.",
+                this.serviceGar.getRessourcesDiffusables(
+                        page,
+                        elementsParPage,
+                        new RessourceDiffusableFilter(
+                                operator,
+                                idRessource,
+                                nomRessource,
+                                idEditeur,
+                                nomEditeur,
+                                distributeurCom,
+                                nomDistributeurCom,
+                                distributeurTech,
+                                nomDistributeurTech,
+                                affichable,
+                                diffusable
+                        )
                 )
         );
     }
 
     @GetMapping(value = "/ressources-diffusables/page-count")
-    public int pageCount(
+    public ApiResponse pageCount(
             @RequestParam(value = "operator", required = false) final String operator,
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
@@ -76,26 +82,29 @@ public class ApiRessourcesDiffusablesController {
             HttpServletResponse response
     ) {
         if(log.isDebugEnabled()) log.debug("Nombre pages ressources diffusables request.");
-        return this.serviceGar.getPageCount(
-                elementsParPage,
-                new RessourceDiffusableFilter(
-                        operator,
-                        idRessource,
-                        nomRessource,
-                        idEditeur,
-                        nomEditeur,
-                        distributeurCom,
-                        nomDistributeurCom,
-                        distributeurTech,
-                        nomDistributeurTech,
-                        affichable,
-                        diffusable
+        return new ApiResponse(
+                "Ressources diffusables page count request successful.",
+                this.serviceGar.getPageCount(
+                        elementsParPage,
+                        new RessourceDiffusableFilter(
+                                operator,
+                                idRessource,
+                                nomRessource,
+                                idEditeur,
+                                nomEditeur,
+                                distributeurCom,
+                                nomDistributeurCom,
+                                distributeurTech,
+                                nomDistributeurTech,
+                                affichable,
+                                diffusable
+                        )
                 )
         );
     }
 
     @GetMapping(value = "/ressources-diffusables/size")
-    public int size(
+    public ApiResponse size(
             @RequestParam(value = "operator", required = false) final String operator,
             @RequestParam(value = "idRessource", required = false) final String idRessource,
             @RequestParam(value = "nomRessource", required = false)  final String nomRessource,
@@ -111,20 +120,54 @@ public class ApiRessourcesDiffusablesController {
             HttpServletResponse response
     ) {
         if(log.isDebugEnabled()) log.debug("Nombre éléments ressources diffusables request.");
-        return this.serviceGar.getSize(
-                new RessourceDiffusableFilter(
-                        operator,
-                        idRessource,
-                        nomRessource,
-                        idEditeur,
-                        nomEditeur,
-                        distributeurCom,
-                        nomDistributeurCom,
-                        distributeurTech,
-                        nomDistributeurTech,
-                        affichable,
-                        diffusable
+        return new ApiResponse(
+                "Ressources diffusables list size request successful.",
+                this.serviceGar.getSize(
+                        new RessourceDiffusableFilter(
+                                operator,
+                                idRessource,
+                                nomRessource,
+                                idEditeur,
+                                nomEditeur,
+                                distributeurCom,
+                                nomDistributeurCom,
+                                distributeurTech,
+                                nomDistributeurTech,
+                                affichable,
+                                diffusable
+                        )
                 )
+        );
+    }
+
+    @ExceptionHandler({
+            MissingServletRequestParameterException.class,
+            MethodArgumentTypeMismatchException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleExceptionMissingParameter(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Exception exception
+    ) {
+        return new ApiResponse(
+                "Api request failed: bad request.",
+                new ApiError(exception)
+        );
+    }
+
+    @ExceptionHandler(
+            Exception.class
+    )
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiResponse handleExceptionElse(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Exception exception
+    ) {
+        return new ApiResponse(
+                "Api request failed: unknown internal server error.",
+                new ApiError(exception)
         );
     }
 }
