@@ -109,34 +109,43 @@ public class ServiceGarHttpGet implements ServiceGar {
     }
 
     private void telechargerFichier() {
-        // Début de téléchargement.
-        log.info("Ressources diffusables source file download: Starting download procedure");
-        if(log.isDebugEnabled()) log.debug("Ressources diffusables source file download: URL is {}", this.ressourcesDiffusablesUri);
-
         try {
-            URL website = new URL(this.ressourcesDiffusablesUri);
+            // Début du téléchargement.
+            if(log.isInfoEnabled()) log.info("Ressources diffusables source file download: Starting download procedure");
+            if(log.isDebugEnabled()) log.debug("Ressources diffusables source file download: URL is {}", this.ressourcesDiffusablesUri);
 
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+            // Identification du fichier.
+            if (this.ressourcesDiffusablesFile == null) {
+                this.ressourcesDiffusablesFile = new File(this.downloadLocationPath);
+            }
 
-            FileOutputStream fos = new FileOutputStream(this.downloadLocationPath);
+            // Création du répertoire parent s'il n'existe pas.
+            if (!this.ressourcesDiffusablesFile.getParentFile().exists()){
+                this.ressourcesDiffusablesFile.getParentFile().mkdirs();
+            }
 
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            // Téléchargement du fichier.
+            new FileOutputStream(this.downloadLocationPath)
+                    .getChannel()
+                    .transferFrom(
+                            Channels.newChannel(new URL(this.ressourcesDiffusablesUri).openStream()),
+                            0,
+                            Long.MAX_VALUE
+                    );
 
-            this.ressourcesDiffusablesFile = new File(this.downloadLocationPath);
+            // Mise à jour de la date.
             this.dateTelechargement = LocalDateTime.now();
+
+            // Suppression de l'historique.
+            this.serviceCacheHistorique.clear();
+
+            // Fin de téléchargement
+            if(log.isInfoEnabled()) log.info("Ressources diffusables source file download: ressources diffusables source file successfully downloaded!");
         } catch (MalformedURLException malformedURLException) {
-            log.error("Ressources diffusables source file download: malformed URL exception");
-            malformedURLException.printStackTrace();
+            log.error("Ressources diffusables source file download: malformed URL exception", malformedURLException);
         } catch (IOException ioException) {
-            log.error("Ressources diffusables source file download: IO exception");
-            ioException.printStackTrace();
+            log.error("Ressources diffusables source file download: IO exception", ioException);
         }
-
-        // Suppression de l'historique.
-        this.serviceCacheHistorique.clear();
-
-        // Fin de téléchargement
-        log.info("Ressources diffusables source file download: ressources diffusables source file successfully downloaded!");
     }
 
     private void lireFichier() {
