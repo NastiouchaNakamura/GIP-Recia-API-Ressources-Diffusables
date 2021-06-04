@@ -186,7 +186,7 @@ public class ServiceGarHttpGet implements ServiceGar {
             // Création de la map qui sert au cas où des ID viennent sans les noms.
             Map<String, String> attributsPseudoCache = new HashMap<>();
 
-            // Pour chaque objet (étonnamment, il y en a des fois plusieurs, souvent le deuxième est un objet vide).
+            // Pour chaque ressource diffusable.
             for (int i = 0; jsonNode.has(i); i++) {
                 // Récupération du node JSON.
                 JsonNode ressourceDiffusableJson = jsonNode.get(i);
