@@ -191,6 +191,13 @@ public class ServiceGarHttpGet implements ServiceGar {
                 // Récupération du node JSON.
                 JsonNode ressourceDiffusableJson = jsonNode.get(i);
 
+                // Vérification que ce n'est pas une "mère de famille".
+                // Selon le standard, une ressource "mère de famille" est une ressource virtuelle qui est connectée
+                // à d'autres ressources dites "membres de famille". Au final ce n'est pas une vraie ressource.
+                if (ressourceDiffusableJson.has("mereFamille")) {
+                    continue;
+                }
+
                 // Nom et ID de la ressource.
                 String idRessource = ressourceDiffusableJson.get("idRessource").asText();
                 JsonNode nomRessourceJson = ressourceDiffusableJson.get("nomRessource");
