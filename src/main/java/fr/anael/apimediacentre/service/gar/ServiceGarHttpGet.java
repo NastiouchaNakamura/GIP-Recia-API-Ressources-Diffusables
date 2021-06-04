@@ -104,7 +104,6 @@ public class ServiceGarHttpGet implements ServiceGar {
     private void verifValidite() {
         if (this.dateTelechargement == null || SECONDS.between(this.dateTelechargement, LocalDateTime.now()) > 86400) { // 24h.
             this.telechargerFichier();
-            this.lireFichier();
         }
     }
 
@@ -141,6 +140,10 @@ public class ServiceGarHttpGet implements ServiceGar {
 
             // Fin de téléchargement
             if(log.isInfoEnabled()) log.info("Ressources diffusables source file download: ressources diffusables source file successfully downloaded!");
+
+            // Lancement de la lecture du fichier.
+            this.lireFichier();
+
         } catch (MalformedURLException malformedURLException) {
             log.error("Ressources diffusables source file download: malformed URL exception", malformedURLException);
         } catch (IOException ioException) {
