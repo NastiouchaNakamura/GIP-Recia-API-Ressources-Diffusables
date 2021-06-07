@@ -8,11 +8,11 @@
         <version>2.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>fr.anael</groupId>
-    <artifactId>api-mediacentre</artifactId>
+    <groupId>fr.recia.ressourcesdiffusablesapi</groupId>
+    <artifactId>ressources-diffusables-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>api-mediacentre</name>
-    <description>Projet API pour médiacentre</description>
+    <name>Ressources Diffusables API</name>
+    <description>API des ressources diffusables</description>
     <properties>
         <java.version>11</java.version>
     </properties>
