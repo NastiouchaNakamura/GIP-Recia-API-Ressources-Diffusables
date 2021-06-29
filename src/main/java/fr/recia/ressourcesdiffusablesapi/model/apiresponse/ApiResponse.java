@@ -1,19 +1,14 @@
 package fr.recia.ressourcesdiffusablesapi.model.apiresponse;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.time.LocalDateTime;
-
 public class ApiResponse {
     // Attributs
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    private final LocalDateTime timestamp;
+    private final long timestamp;
     private String message;
     private Object payload;
 
     // Constructeurs
     private ApiResponse() {
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = System.currentTimeMillis();
     }
 
     public ApiResponse(String message, Object payload) {
@@ -23,6 +18,10 @@ public class ApiResponse {
     }
 
     // Getteurs
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+
     public String getMessage() {
         return this.message;
     }
