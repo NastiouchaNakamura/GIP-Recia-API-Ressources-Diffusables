@@ -12,26 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.recia.ressourcesdiffusablesapi.model.apiresponse;
 
-public class ApiError {
+package fr.recia.ressourcesdiffusablesapi.model.jsonmirror;
 
-    private final Throwable exception;
+import lombok.Getter;
+import lombok.Setter;
 
-    public ApiError(Throwable exception) {
-        this.exception = exception;
-    }
+public class DistributeurComJsonMirror {
+        @Getter
+        @Setter
+        String distributeurCom;
+        @Getter @Setter
+        String nomDistributeurCom;
 
-    public String getExceptionName() {
-        return this.exception.getClass().getSimpleName();
-    }
-
-    public String getExceptionMessage() {
-        return this.exception.getMessage();
-    }
-
-    public String getExceptionLocalizedMessage() {
-        return this.exception.getLocalizedMessage();
-    }
+        void replaceNullValuesByDefaults(){
+                distributeurCom = distributeurCom == null ? "" : distributeurCom;
+                nomDistributeurCom = nomDistributeurCom == null ? "" : nomDistributeurCom;
+        }
 
 }

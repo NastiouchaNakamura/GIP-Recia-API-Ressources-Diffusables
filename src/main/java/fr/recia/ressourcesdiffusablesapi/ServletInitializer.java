@@ -12,26 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.recia.ressourcesdiffusablesapi.model.apiresponse;
+package fr.recia.ressourcesdiffusablesapi;
 
-public class ApiError {
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-    private final Throwable exception;
+public class ServletInitializer extends SpringBootServletInitializer {
 
-    public ApiError(Throwable exception) {
-        this.exception = exception;
-    }
-
-    public String getExceptionName() {
-        return this.exception.getClass().getSimpleName();
-    }
-
-    public String getExceptionMessage() {
-        return this.exception.getMessage();
-    }
-
-    public String getExceptionLocalizedMessage() {
-        return this.exception.getLocalizedMessage();
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(ApiMediacentreApplication.class);
     }
 
 }
